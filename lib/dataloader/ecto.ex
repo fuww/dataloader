@@ -537,8 +537,10 @@ if Code.ensure_loaded?(Ecto) do
         coerced_inputs =
           if type = queryable.__schema__(:type, col) do
             for input <- inputs do
-              {:ok, input} = Ecto.Type.cast(type, input)
-              input
+              case Ecto.Type.cast(type, input) do
+                 {:ok, input} -> input
+                 _ -> input
+              end
             end
           else
             inputs
