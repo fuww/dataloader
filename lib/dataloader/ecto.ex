@@ -672,7 +672,7 @@ if Code.ensure_loaded?(Ecto) do
         records = records |> Enum.map(&Map.put(&1, field, empty))
 
         results =
-          if query.limit || query.offset do
+          if (query.limit || query.offset) && !source.options[:disable_lateral_joins] do
             records
             |> preload_lateral(field, query, source.repo, repo_opts)
           else
